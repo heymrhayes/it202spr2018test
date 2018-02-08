@@ -24,20 +24,34 @@
         function doSearch () {
             
             // Built by LucyBot. www.lucybot.com
+            
+            // the API endpoint for movie reviews
             var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
+            
+            
+            // the API looks for some specific URL parameters; here we pass two
             url += '?' + $.param({
-                'api-key': "171742565481ab1fc4d4ed5e38f63d1c:2:60955541",
+                'api-key': "<your api key>",
+                
+                //  use the value from the text input box as the value for the query parameter
                 'query': $("#query").val()
             });
+            
+            
+            //  make the http request
             $.ajax({
                 url: url,
                 method: 'GET',
             }).done(function(response) {
-                //console.log(response);
                 
+                // create a message about the number of results;  num_results is part of the response object
+                $("#results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned " + response.num_results + " results.")
+                
+                // loop through the array of movie reviews;  that array is the "results" property of the response object
                 $.each(response.results, function(i,v) {
-                    //console.log(v);
-                    $("body").append(v.display_title  + v.opening_date + "<br>");
+                    
+                    // concatenate some values and html and append to the results div/screen
+                    $("#results").append(v.display_title  + " opens on " + v.opening_date + "<br>");
                     
                 });
                 
